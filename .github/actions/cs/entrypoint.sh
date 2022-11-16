@@ -3,15 +3,10 @@
 # Fail on error
 set -e
 
+cd drupal_repo
 export PATH="$PATH:/root/drupal/vendor/bin"
-ls
-ls workflows
-ls drupal_repo
-pwd
 echo "--------- CS O'Clock -------------"
 phpcs --standard=Drupal,DrupalPractice ./
-
-if [ -n "${phpstan_level+set}" ]; then
-  echo "Running phpstan at level $phpstan_level"
-  phpstan analyse -l $phpstan_level ./
-fi
+echo "--------- PHPSTAN O'Clock -------------"
+echo "Running phpstan at level $phpstan_level"
+phpstan analyse -l $phpstan_level ./
