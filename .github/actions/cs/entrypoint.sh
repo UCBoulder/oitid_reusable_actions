@@ -5,6 +5,8 @@ set -e
 
 export PATH="$PATH:/root/drupal/vendor/bin"
 ls
+ls workflows
+ls drupal_repo
 pwd
 echo "--------- CS O'Clock -------------"
 phpcs --standard=Drupal,DrupalPractice ./
