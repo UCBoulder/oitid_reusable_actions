@@ -11,16 +11,15 @@ on:
 jobs:
   deploy:
     name: Run phpcs
-    runs-on: protitude/oit-actions
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Run tests
-        run: |
-          export PATH="$PATH:/root/drupal/vendor/bin"
-          echo "--------- CS O'Clock -------------"
-          phpcs --standard=Drupal,DrupalPractice ./
-
-          if [ -n "${phpstan_level+set}" ]; then
-            echo "Running phpstan at level $phpstan_level"
-            phpstan analyse -l $phpstan_level ./
-          fi
+        with:
+          path: drupal_repo
+      - name: Checkout workflows repo # required so we can reference the actions locally
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.workflows-ref }}
+          path: workflows
+          repository: UCBoulder/oitid_reusable_actions
+      - uses: ./workflows/.github/actions/cs
