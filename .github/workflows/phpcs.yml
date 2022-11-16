@@ -23,4 +23,5 @@ jobs:
           path: workflows
           repository: UCBoulder/oitid_reusable_actions
       - uses: ./workflows/.github/actions/cs
-        env: ${{ secrets.phpstan_level }}
+        env:
+          phpstan_level: ${{ secrets.phpstan_level }}
