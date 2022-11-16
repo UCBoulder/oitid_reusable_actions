@@ -11,7 +11,16 @@ on:
 jobs:
   deploy:
     name: Run phpcs
-    runs-on: ubuntu-latest
+    runs-on: protitude/oit-actions
     steps:
       - uses: actions/checkout@v1
-      - uses: UCBoulder/oitid_reusable_actions/.github/actions/cs
+      - name: Run tests
+        run: |
+          export PATH="$PATH:/root/drupal/vendor/bin"
+          echo "--------- CS O'Clock -------------"
+          phpcs --standard=Drupal,DrupalPractice ./
+
+          if [ -n "${phpstan_level+set}" ]; then
+            echo "Running phpstan at level $phpstan_level"
+            phpstan analyse -l $phpstan_level ./
+          fi
