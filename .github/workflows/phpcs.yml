@@ -4,6 +4,10 @@ on:
     branches:
       - '*'
   workflow_call:
+    secrets:
+      phpstan_level:
+        required: false
+        description: ''
 jobs:
   deploy:
     name: Run phpcs
@@ -11,5 +15,3 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: ./.github/actions/cs
-        env:
-          phpstan_level: 0
