@@ -24,8 +24,6 @@ on:
         description: "Subscriptions key"
       BEHAT_TAG:
         description: "Behat tag to run"
-      MSTEAMS_WEBHOOK:
-        description: "Microsoft Teams hook"
 permissions:
   actions: read
   contents: write
@@ -95,21 +93,7 @@ jobs:
           database: ${{ github.event.inputs.database }}
       - name: Run behat tests
         run: |
-          blt oit:behat $behat_tag
+          vendor/bin/blt oit:behat $behat_tag
           exit 0
         env:
           behat_tag: ${{ github.event.inputs.BEHAT_TAG }}
-      - name: Microsoft Teams Notification
-        uses: skitionek/notify-microsoft-teams@master
-        if: always()
-        with:
-          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
-          needs: ${{ toJson(needs) }}
-          job: ${{ toJson(job) }}
-          steps: ${{ toJson(steps) }}
-          overwrite: "{title: `Behat tests ran: ${workflow_link}`}"
-      - name: Microsoft Teams Notification
-        uses: skitionek/notify-microsoft-teams@master
-        if: failure()
-        with:
-          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
