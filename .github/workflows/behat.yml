@@ -24,6 +24,8 @@ on:
         description: "Subscriptions key"
       BEHAT_TAG:
         description: "Behat tag to run"
+      MSTEAMS_WEBHOOK:
+        description: "Microsoft Teams hook"
 permissions:
   actions: read
   contents: write
@@ -91,10 +93,9 @@ jobs:
           lando drush en dblog devel devel_kint_extras
         env:
           database: ${{ github.event.inputs.database }}
-      - name: Run them tests
+      - name: Run behat tests
         run: |
-          ls tests/behat
-          lando ssh -c "('google-chrome' --headless --no-sandbox --disable-dev-shm-usage --disable-web-security --remote-debugging-port=9222 &) | behat  --format pretty /app/tests/behat --colors --no-interaction --stop-on-failure --config /app/tests/behat/local.yml --profile local --tags @ghadmin -v"
+          blt oit:behat $behat_tag
           exit 0
         env:
           behat_tag: ${{ github.event.inputs.BEHAT_TAG }}
