@@ -1,0 +1,115 @@
+name: (M) Behat Tests
+on:
+  workflow_call:
+    secrets:
+      LANDO_VERSION:
+        description: "Current version of lando"
+      GH_TOKEN_REPO:
+        description: "PAT"
+      GITHUB_TOKEN:
+        description: "github token set per session"
+      LANDO_ENV:
+        description: ".env variables"
+      CREATEUSERS:
+        description: "Dev users script"
+      SERVICENOW_KEY:
+        description: "Servicenow key"
+      ENCRYPT_KEY:
+        description: "One key to rule them all"
+      TEAMS_KEY:
+        description: "Key to send teams messages"
+      BEHAT_LOCAL:
+        description: "Behat local.yml"
+      LIASON:
+        description: "Liason Key"
+      SUBSCRIPTIONS_KEY:
+        description: "Subscriptions key"
+      BEHAT_TAG:
+        description: "Behat tag to run"
+permissions:
+  actions: read
+  contents: write
+jobs:
+  behat:
+    name: Behat tests
+    runs-on: ubuntu-latest
+    environment: oit-ci
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install Lando
+        run: |
+          LANDO_V=$(git -c 'versionsort.suffix=-' \
+            ls-remote --exit-code --refs --sort='version:refname' --tags https://github.com/lando/lando.git '*.*.*' \
+            | tail --lines=1 \
+            | cut --delimiter='/' --fields=3)
+          sudo curl -fsSL -o /usr/local/bin/lando "https://files.lando.dev/cli/lando-linux-x64-$lando_version"
+          sudo chmod +x /usr/local/bin/lando
+        env:
+          lando_version: ${{ secrets.LANDO_VERSION }}
+      - name: Setup Lando cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.lando/cache
+          key: ${{ runner.os }}-lando${{ matrix.lando.version }}-${{ github.ref }}
+          restore-keys: |
+            ${{ runner.os }}-lando${{ matrix.lando.version }}-1
+      - name: Spin up site
+        run: |
+          composer config -g github-oauth.github.com $gh_token
+          composer install --ignore-platform-reqs -n
+          echo "$lando_env" > .env
+          echo "GITHUB_TOKEN=$GITHUB_ACTOR:$GITHUB_TOKEN" >> .env
+          vendor/bin/blt oit:landosetup $gh_token
+          ls docroot/sites/default/settings/
+          mkdir .keys
+          echo "$test_users" > .keys/createTestUsers.sh
+          echo "$encrypt_key" > .keys/encrypt.key
+          echo "$servicenow" > .keys/oit.servicenow.key
+          echo "$teams_key" > .keys/dingo_teams.key
+          echo "$liason" > .keys/oit.liaison.key
+          echo "$subscripiton" > .keys/oit.subscriptions.key
+          echo "$behat_local" > tests/behat/local.yml
+        env:
+          gh_token: ${{ secrets.GH_TOKEN_REPO }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          lando_env: ${{ secrets.LANDO_ENV }}
+          test_users: ${{ secrets.CREATEUSERS }}
+          servicenow: ${{ secrets.SERVICENOW_KEY }}
+          encrypt_key: ${{ secrets.ENCRYPT_KEY }}
+          teams_key: ${{ secrets.TEAMS_KEY }}
+          behat_local: ${{ secrets.BEHAT_LOCAL }}
+          liason: ${{ secrets.LIASON }}
+          subscripiton: ${{ secrets.SUBSCRIPTIONS_KEY }}
+      - name: Custom Database
+        if: "${{ github.event.inputs.database != '' }}"
+        run: |
+          rm backups/site.sql.gz
+          wget -O backups/site.sql.gz '$database'
+          lando db-import backups/site.sql.gz
+          lando drush sql-sanitize --sanitize-password -y
+          chmod u+x .keys/createTestUsers.sh
+          lando ssh -c /app/.keys/createTestUsers.sh
+          lando drush en oit_dev
+          lando drush en dblog devel devel_kint_extras
+        env:
+          database: ${{ github.event.inputs.database }}
+      - name: Run them tests
+        run: |
+          lando ssh -c "('google-chrome' --headless --no-sandbox --disable-dev-shm-usage --disable-web-security --remote-debugging-port=9222 &) | behat  --format pretty /app/tests/behat --colors --no-interaction --stop-on-failure --config /app/tests/behat/local.yml --profile local --tags @$behat_tag -v"
+          exit 0
+        env:
+          behat_tag: ${{ github.event.inputs.BEHAT_TAG }}
+      - name: Microsoft Teams Notification
+        uses: skitionek/notify-microsoft-teams@master
+        if: always()
+        with:
+          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
+          needs: ${{ toJson(needs) }}
+          job: ${{ toJson(job) }}
+          steps: ${{ toJson(steps) }}
+          overwrite: "{title: `Behat tests ran: ${workflow_link}`}"
+      - name: Microsoft Teams Notification
+        uses: skitionek/notify-microsoft-teams@master
+        if: failure()
+        with:
+          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
