@@ -54,12 +54,12 @@ jobs:
         env:
           lando_version: ${{ secrets.LANDO_VERSION }}
       - name: Setup Lando cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
+        env:
+          cache-name: lando
         with:
           path: ~/.lando/cache
-          key: ${{ runner.os }}-lando${{ matrix.lando.version }}-${{ github.ref }}
-          restore-keys: |
-            ${{ runner.os }}-lando${{ matrix.lando.version }}-1
+          key: ${{ runner.os }}-lando${{ secrets.LANDO_VERSION }}
       - name: Spin up site
         run: |
           composer config -g github-oauth.github.com $gh_token
