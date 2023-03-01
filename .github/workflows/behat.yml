@@ -34,6 +34,19 @@ jobs:
     environment: oit-ci
     steps:
       - uses: actions/checkout@v1
+      - name: Set the cache date
+        id: set_cache_date
+        run: |
+          echo "CACHE_DATE=$(date "+%y%m%d-%H")" >> $GITHUB_ENV
+      - name: Cache Site
+        uses: actions/cache@v3
+        env:
+          cache-name: oit-dingo
+        with:
+          path: |
+            vendor
+            docroot/modules
+          key: dingo-${{ env.CACHE_DATE }}
       - name: Install Lando
         run: |
           LANDO_V=$(git -c 'versionsort.suffix=-' \
