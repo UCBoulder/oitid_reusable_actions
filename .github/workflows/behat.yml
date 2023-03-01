@@ -93,7 +93,8 @@ jobs:
           database: ${{ github.event.inputs.database }}
       - name: Run them tests
         run: |
-          lando ssh -c "('google-chrome' --headless --no-sandbox --disable-dev-shm-usage --disable-web-security --remote-debugging-port=9222 &) | behat  --format pretty /app/tests/behat --colors --no-interaction --stop-on-failure --config /app/tests/behat/local.yml --profile local --tags @$behat_tag -v"
+          ls tests/behat
+          lando ssh -c "('google-chrome' --headless --no-sandbox --disable-dev-shm-usage --disable-web-security --remote-debugging-port=9222 &) | behat  --format pretty /app/tests/behat --colors --no-interaction --stop-on-failure --config /app/tests/behat/local.yml --profile local --tags @ghadmin -v"
           exit 0
         env:
           behat_tag: ${{ github.event.inputs.BEHAT_TAG }}
