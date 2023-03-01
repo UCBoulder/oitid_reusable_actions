@@ -6,8 +6,6 @@ on:
         description: "Current version of lando"
       GH_TOKEN_REPO:
         description: "PAT"
-      GITHUB_TOKEN:
-        description: "github token set per session"
       LANDO_ENV:
         description: ".env variables"
       CREATEUSERS:
