@@ -37,16 +37,7 @@ jobs:
       - name: Set the cache date
         id: set_cache_date
         run: |
-          echo "CACHE_DATE=$(date "+%y%m%d-%H")" >> $GITHUB_ENV
-      - name: Cache Site
-        uses: actions/cache@v3
-        env:
-          cache-name: oit-dingo
-        with:
-          path: |
-            vendor
-            docroot
-          key: dingo-${{ env.CACHE_DATE }}
+          echo "CACHE_DATE=$(date "+%y%m%d")" >> $GITHUB_ENV
       - name: Install Lando
         run: |
           sudo curl -fsSL -o /usr/local/bin/lando "https://files.lando.dev/cli/lando-linux-x64-$lando_version"
