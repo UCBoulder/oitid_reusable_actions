@@ -92,8 +92,6 @@ jobs:
           database: ${{ github.event.inputs.database }}
       - name: Run behat tests
         run: |
-          lando ssh -c "which google-chrome"
-          lando ssh -c "pkill chrome"
-          vendor/bin/blt oit:behat $behat_tag
+          $this->_exec('lando ssh -c "(behat  --format pretty /app/tests/behat --colors --no-interaction --stop-on-failure --config /app/tests/behat/local.yml --profile local --tags ~@liaison -v)";
         env:
           behat_tag: ${{ github.event.inputs.BEHAT_TAG }}
