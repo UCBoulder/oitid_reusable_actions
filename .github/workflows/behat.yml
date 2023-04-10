@@ -93,6 +93,7 @@ jobs:
       - name: Run behat tests
         run: |
           lando ssh -c "which google-chrome"
+          lando ssh -c "pkill chrome"
           vendor/bin/blt oit:behat $behat_tag
         env:
           behat_tag: ${{ github.event.inputs.BEHAT_TAG }}
