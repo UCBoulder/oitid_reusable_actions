@@ -62,7 +62,7 @@ jobs:
       - name: Composer install
         run: |
           composer config -g github-oauth.github.com $gh_token
-          composer install --ignore-platform-reqs --prefer-source -n
+          composer install --ignore-platform-reqs --prefer-dist -n
         env:
           gh_token: ${{ secrets.GH_TOKEN_REPO }}
 
