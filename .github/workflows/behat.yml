@@ -73,8 +73,10 @@ jobs:
         id: drupal-files-cache
         uses: actions/cache@v3
         with:
-          path: docroot/sites/default/files
-          key: ${{ runner.os }}-${{ env.LAST_SUNDAY }}
+          path: |
+            docroot/sites/default/files
+            files-private
+          key: ${{ runner.os }}-${{ env.LAST_SUNDAY }}-files
 
       - name: Spin up site
         run: |
