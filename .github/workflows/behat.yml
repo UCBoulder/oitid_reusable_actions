@@ -56,9 +56,10 @@ jobs:
       - uses: php-actions/composer@v6
         env:
           COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.GH_TOKEN_REPO }}"} }'
+          args: --ignore-platform-reqs --prefer-source
           interaction: no
           dev: yes
-          args: --ignore-platform-reqs --prefer-source
+          quiet: no
 
       - name: Spin up site
         run: |
