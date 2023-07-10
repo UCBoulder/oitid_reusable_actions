@@ -57,7 +57,7 @@ jobs:
         env:
           COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.GH_TOKEN_REPO }}"} }'
         with:
-          args: --profile --ignore-platform-req --prefer-source
+          args: --profile --ignore-platform-req=ext-gd --prefer-source
           interaction: no
           dev: yes
           quiet: no
