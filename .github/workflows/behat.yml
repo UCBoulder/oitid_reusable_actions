@@ -50,17 +50,15 @@ jobs:
         id: composer-cache
         uses: actions/cache@v3
         with:
-          path: /tmp/composer-cache
+          path: ~/.composer/cache/files/vendor
           key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
 
-      - uses: php-actions/composer@v6
+      - name: Composer install
+        run: |
+          composer config -g github-oauth.github.com $gh_token
+          composer install --ignore-platform-reqs --prefer-source -n
         env:
-          COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.GH_TOKEN_REPO }}"} }'
-        with:
-          args: --profile --ignore-platform-req=ext-gd --prefer-source
-          interaction: no
-          dev: yes
-          quiet: no
+          gh_token: ${{ secrets.GH_TOKEN_REPO }}
 
       - name: Spin up site
         run: |
