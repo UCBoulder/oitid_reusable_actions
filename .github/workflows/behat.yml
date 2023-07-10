@@ -66,6 +66,16 @@ jobs:
         env:
           gh_token: ${{ secrets.GH_TOKEN_REPO }}
 
+      - name: Last Sunday date
+        run: echo "LAST_SUNDAY=$(date -d "last Sunday" +%Y-%m-%d)" >> $GITHUB_ENV
+
+      - name: Cache Files
+        id: drupal-files-cache
+        uses: actions/cache@v3
+        with:
+          path: docroot/sites/default/files
+          key: ${{ runner.os }}-${{ env.LAST_SUNDAY }}
+
       - name: Spin up site
         run: |
           composer config -g github-oauth.github.com $gh_token
