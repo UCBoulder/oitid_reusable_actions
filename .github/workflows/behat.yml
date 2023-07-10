@@ -39,7 +39,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: /usr/local/bin/lando
-          key: ${{ runner.os }}-${{ $LANDO_VERSION }}-lando
+          key: ${{ runner.os }}-${ LANDO_VERSION }-lando
       - name: Install Lando
         if: steps.cache-lando.outputs.cache-hit != 'true'
         run: |
