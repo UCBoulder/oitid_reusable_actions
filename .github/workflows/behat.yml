@@ -56,7 +56,8 @@ jobs:
       - uses: php-actions/composer@v6
         env:
           COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.GH_TOKEN_REPO }}"} }'
-          args: --profile --ignore-platform-req=ext-gd
+        with:
+          args: --profile --ignore-platform-req --prefer-source
           interaction: no
           dev: yes
           quiet: no
