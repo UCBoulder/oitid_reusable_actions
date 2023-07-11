@@ -49,13 +49,6 @@ jobs:
           sudo curl -fsSL -o /usr/local/bin/lando "https://files.lando.dev/cli/lando-linux-x64-$LANDO_VERSION"
           sudo chmod +x /usr/local/bin/lando
 
-      - name: Cache Docker Images
-        id: docker-images
-        uses: actions/cache@v3
-        with:
-          path: /var/lib/docker/
-          key: ${{ runner.os }}-${{ hashFiles('**/.lando.yml') }}-${{ env.LANDO_VERSION }}-docker-images
-
       - name: "Validate composer.json and composer.lock"
         run: "composer validate --strict"
 
