@@ -69,6 +69,9 @@ jobs:
       - name: Last Sunday date
         run: echo "LAST_SUNDAY=$(date -d "last Sunday" +%Y-%m-%d)" >> $GITHUB_ENV
 
+      - name: Todays date
+        run: echo "DATE=$(date +%Y-%m-%d)" >> $GITHUB_ENV
+
       - name: Cache Files
         id: drupal-files-cache
         uses: actions/cache@v3
@@ -77,6 +80,13 @@ jobs:
             docroot/sites/default/files
             files-private
           key: ${{ runner.os }}-${{ env.LAST_SUNDAY }}-files
+
+      - name: Daily db cache
+        id: drupal-db-cache
+        uses: actions/cache@v3
+        with:
+          path: backups
+          key: ${{ runner.os }}-${{ env.DATE }}-files
 
       - name: Spin up site
         run: |
