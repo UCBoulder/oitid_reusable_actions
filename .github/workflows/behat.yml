@@ -32,19 +32,29 @@ jobs:
     environment: oit-ci
     steps:
       - uses: actions/checkout@v1
+
       - name: Set lando version.
         run: echo "LANDO_VERSION=$(cat .github/lando_version.md)" >> $GITHUB_ENV
+
       - name: Cache Lando
         id: cache-lando
         uses: actions/cache@v3
         with:
           path: /usr/local/bin/lando
           key: ${{ runner.os }}-${{ env.LANDO_VERSION }}-lando
+
       - name: Install Lando
         if: steps.cache-lando.outputs.cache-hit != 'true'
         run: |
           sudo curl -fsSL -o /usr/local/bin/lando "https://files.lando.dev/cli/lando-linux-x64-$LANDO_VERSION"
           sudo chmod +x /usr/local/bin/lando
+
+      - name: Cache Docker Images
+        id: docker-images
+        uses: actions/cache@v3
+        with:
+          path: /var/lib/docker/
+          key: ${{ runner.os }}-${{ hashFiles('**/.lando.yml') }}-${{ env.LANDO_VERSION }}-docker-images
 
       - name: "Validate composer.json and composer.lock"
         run: "composer validate --strict"
@@ -104,6 +114,7 @@ jobs:
           echo "$liason" > .keys/oit.liaison.key
           echo "$subscripiton" > .keys/oit.subscriptions.key
           cp blt/local-behat.yml tests/behat/local.yml
+          ls /var/lib/docker/
         env:
           gh_token: ${{ secrets.GH_TOKEN_REPO }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
