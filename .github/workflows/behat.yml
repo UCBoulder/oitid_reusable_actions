@@ -89,7 +89,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: backups
-          key: ${{ runner.os }}-${{ env.DATE }}-files
+          key: ${{ runner.os }}-${{ env.DATE }}-db
 
       - name: Spin up site
         run: |
