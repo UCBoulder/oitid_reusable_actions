@@ -4,6 +4,8 @@ on:
     secrets:
       GH_TOKEN_REPO:
         description: "PAT"
+      GITHUB_TOKEN:
+        description: "GITHUB_TOKEN for this session"
       LANDO_ENV:
         description: ".env variables"
       CREATEUSERS:
