@@ -33,6 +33,11 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      - name: Custom DATABASE
+        run: echo "DATABASE=$( $DATABASE )" >> $GITHUB_ENV
+        env:
+          database: ${{ secrets.DATABASE }}
+
       - name: Set lando version.
         run: echo "LANDO_VERSION=$(cat .github/lando_version.md)" >> $GITHUB_ENV
 
@@ -119,19 +124,16 @@ jobs:
           subscripiton: ${{ secrets.SUBSCRIPTIONS_KEY }}
 
       - name: Custom Database
-        if: "${{ secrets.DATABASE != '' }}"
+        if: "${{ env.DATABASE != '' }}"
         run: |
           rm backups/site.sql.gz
-          wget -O backups/site.sql.gz '$database'
+          wget -O backups/site.sql.gz '$DATABASE'
           lando db-import backups/site.sql.gz
           lando drush sql-sanitize --sanitize-password -y
           chmod u+x .keys/createTestUsers.sh
           lando ssh -c /app/.keys/createTestUsers.sh
           lando drush en oit_dev
           lando drush en dblog devel devel_kint_extras
-        env:
-          database: ${{ secrets.DATABASE }}
-
 
       - name: Run behat tests
         run: |
