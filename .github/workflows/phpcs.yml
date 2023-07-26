@@ -13,11 +13,11 @@ jobs:
     name: Run phpcs
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: drupal_repo
       - name: Checkout workflows repo # required so we can reference the actions locally
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: ${{ inputs.workflows-ref }}
           path: workflows
