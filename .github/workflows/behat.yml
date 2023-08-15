@@ -31,10 +31,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: oit-ci
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3.5.3
 
       - id: Lando
-        uses: UCBoulder/oitid_lando_start@v1
+        uses: UCBoulder/oitid_lando_start@v2
         with:
           DATABASE: ${{ secrets.DATABASE }}
           GH_TOKEN_REPO: ${{ secrets.GH_TOKEN_REPO }}
