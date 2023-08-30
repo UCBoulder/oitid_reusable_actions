@@ -20,6 +20,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3.6.0
+      - name: Get Repo Name
+        run: echo "BRANCH=$(echo $branch | awk -F / '{print $3}')" >> $GITHUB_ENV
+        env:
+          branch: ${{ secrets.branch }}
       - name: Trigger Tests
         run: |
           echo "Testing $REPO on branch $BRANCH"
@@ -28,4 +32,3 @@ jobs:
           level: ${{ secrets.phpstan_level }}
           GH_TOKEN: ${{ secrets.ralphie_token }}
           REPO: ${{ secrets.repo }}
-          BRANCH: ${{ secrets.branch }}
