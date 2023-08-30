@@ -8,9 +8,6 @@ on:
       repo:
         required: true
         description: 'The repository name'
-      branch:
-        required: true
-        description: 'The repository branch'
       phpstan_level:
         required: false
         description: ''
@@ -21,9 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3.6.0
       - name: Get Repo Name
-        run: echo "BRANCH=$(echo $branch | awk -F / '{print $3}')" >> $GITHUB_ENV
-        env:
-          branch: ${{ secrets.branch }}
+        run: echo "BRANCH=$(echo $GITHUB_REF | awk -F / '{print $3}')" >> $GITHUB_ENV
       - name: Trigger Tests
         run: |
           touch test.txt
