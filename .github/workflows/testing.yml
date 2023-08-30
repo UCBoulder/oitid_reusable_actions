@@ -26,9 +26,19 @@ jobs:
           branch: ${{ secrets.branch }}
       - name: Trigger Tests
         run: |
+          touch test.txt
+          echo "Branch: $BRANCH - Repo: $REPO" >> test.txt
           echo "Testing $REPO on branch $BRANCH"
           gh workflow run codetesting.yml -f modules="['$REPO']" -f phpstan_level=$level -f branch=$BRANCH -R UCBoulder/oit_dingo
         env:
           level: ${{ secrets.phpstan_level }}
           GH_TOKEN: ${{ secrets.ralphie_token }}
           REPO: ${{ secrets.repo }}
+
+      - name: 'Testing artifact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: Test
+          path: test.txt
+          retention-days: 1
+
