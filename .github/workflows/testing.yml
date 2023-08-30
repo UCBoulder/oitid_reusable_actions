@@ -28,7 +28,7 @@ jobs:
         env:
           level: ${{ secrets.phpstan_level }}
           GH_TOKEN: ${{ secrets.ralphie_token }}
-          REPO: ${{ secrets.repo }}
+          REPO: ${{ github.event.repository.name }}
 
       - name: 'Testing artifact'
         uses: actions/upload-artifact@v3
