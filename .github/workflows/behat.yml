@@ -34,7 +34,7 @@ jobs:
       - uses: actions/checkout@v3.5.3
 
       - id: Lando
-        uses: UCBoulder/oitid_lando_start@v2
+        uses: UCBoulder/oitid_lando_start@v2.1
         with:
           DATABASE: ${{ secrets.DATABASE }}
           GH_TOKEN_REPO: ${{ secrets.GH_TOKEN_REPO }}
@@ -46,6 +46,7 @@ jobs:
           TEAMS_KEY: ${{ secrets.TEAMS_KEY }}
           LIASON: ${{ secrets.LIASON }}
           SUBSCRIPTIONS_KEY: ${{ secrets.SUBSCRIPTIONS_KEY }}
+          CONFIG_SYNC: 1
 
       - name: Run behat tests
         run: |
