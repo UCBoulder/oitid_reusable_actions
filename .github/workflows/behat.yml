@@ -22,6 +22,8 @@ on:
         description: "Behat tag to run"
       DATABASE:
         description: "Use specific backup"
+      CONFIG_SYNC:
+        description: "Run config sync boolean"
 permissions:
   actions: read
   contents: write
