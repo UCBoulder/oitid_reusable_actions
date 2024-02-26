@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: oit-ci
     steps:
-      - uses: actions/checkout@v3.5.3
+      - uses: actions/checkout@v4.1.1
 
       - id: Lando
         uses: UCBoulder/oitid_lando_start@v2.2
@@ -50,7 +50,7 @@ jobs:
 
       - name: Run Cypress tests
         run: |
-          cd tests/cypress && lando cypress run  --config baseUrl=https://dingo.lndo.site 
+          cd tests/cypress && lando cypress run  --config baseUrl=https://dingo.lndo.site
 
       - name: Screenshots artifact
         if: failure()
