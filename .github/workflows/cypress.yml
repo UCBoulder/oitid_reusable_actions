@@ -53,7 +53,8 @@ jobs:
       - name: Run Cypress tests
         run: |
           lando curl
-          vendor/bin/blt oit:cypress $SITE
+          cd tests/cypress
+          lando cypress run --config baseUrl=https://$SITE.lndo.site/ -s cypress/e2e/$SITE
         env:
           SITE: ${{ secrets.SITE }}
 
