@@ -22,6 +22,8 @@ on:
         description: "Use specific backup"
       CONFIG_SYNC:
         description: "Run config sync boolean"
+      SITE:
+        description: "Site to test"
 permissions:
   actions: read
   contents: write
@@ -51,7 +53,9 @@ jobs:
       - name: Run Cypress tests
         run: |
           lando curl
-          cd tests/cypress && lando cypress run  --config baseUrl=https://dingo.lndo.site
+          vendor/bin/blt oit:cypress $SITE
+        env:
+          SITE: ${{ secrets.SITE }}
 
       - name: Screenshots artifact
         if: failure()
