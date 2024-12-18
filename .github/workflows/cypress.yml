@@ -54,7 +54,8 @@ jobs:
         run: |
           lando curl
           cd tests/cypress
-          lando cypress run --config baseUrl=https://$SITE.lndo.site/ -s cypress/e2e/$SITE
+          domain=$(echo "$1" | sed 's/[0-9]//g')
+          lando cypress run --config baseUrl=https://$domain.lndo.site/ -s cypress/e2e/$SITE
         env:
           SITE: ${{ secrets.SITE }}
 
