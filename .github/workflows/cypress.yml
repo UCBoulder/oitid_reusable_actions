@@ -62,6 +62,6 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4.3.1
         with:
-          name: screenshots
-          path: tests/cypress/cypress/${{ secrets.SITE }}
+          name: cypress-screenshots-${{ secrets.SITE }}
+          path: tests/cypress/cypress/screenshots
           retention-days: 1
