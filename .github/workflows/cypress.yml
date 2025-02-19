@@ -54,7 +54,7 @@ jobs:
         run: |
           lando curl
           domain=$(echo "$SITE" | sed 's/[0-9]//g')
-          /vendor/bin/robo cypress $SITE
+          vendor/bin/robo cypress $SITE
         env:
           SITE: ${{ secrets.SITE }}
 
