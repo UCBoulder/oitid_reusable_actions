@@ -52,7 +52,6 @@ jobs:
 
       - name: Run Cypress tests
         run: |
-          ddev exec 'curl -s https://oit.ddev.site:8443 > /dev/null'
           domain=$(echo "$SITE" | sed 's/[0-9]//g')
           vendor/bin/robo cypress $SITE
         env:
