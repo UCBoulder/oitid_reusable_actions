@@ -39,7 +39,7 @@ jobs:
         uses: UCBoulder/oitid_ddev_start@1.0
         env:
           site: ${{ secrets.SITE }}
-        if: github.ref_name == 'md-dev' || (site == 'oit' || site == 'data' || site == 'data1')
+        if: github.ref_name == 'md-dev' || (env.site == 'oit' || env.site == 'data' || env.site == 'data1')
         with:
           DATABASE: ${{ secrets.DATABASE }}
           GH_TOKEN_REPO: ${{ secrets.GH_TOKEN_REPO }}
@@ -56,7 +56,7 @@ jobs:
       - name: Run Cypress tests
         env:
           site: ${{ secrets.SITE }}
-        if: github.ref_name == 'md-dev' || (site == 'oit' || site == 'data' || site == 'data1')
+        if: github.ref_name == 'md-dev' || (env.site == 'oit' || env.site == 'data' || env.site == 'data1')
         run: |
           domain=$(echo "$SITE" | sed 's/[0-9]//g')
           vendor/bin/robo cypress $site
@@ -64,7 +64,7 @@ jobs:
       - name: Skip Cypress tests
         env:
           site: ${{ secrets.SITE }}
-        if: github.ref_name != 'md-dev' && (site == 'data2' || site == 'data3' || site == 'data4')
+        if: github.ref_name != 'md-dev' && (env.site == 'data2' || env.site == 'data3' || env.site == 'data4')
         run: |
           echo "Skipping Cypress tests for $site"
 
