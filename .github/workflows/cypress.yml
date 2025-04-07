@@ -59,16 +59,14 @@ jobs:
         if: github.ref_name == 'md-dev' || (site == 'oit' || site == 'data' || site == 'data1')
         run: |
           domain=$(echo "$SITE" | sed 's/[0-9]//g')
-          vendor/bin/robo cypress $SITE
+          vendor/bin/robo cypress $site
 
       - name: Skip Cypress tests
         env:
           site: ${{ secrets.SITE }}
         if: github.ref_name != 'md-dev' && (site == 'data2' || site == 'data3' || site == 'data4')
         run: |
-          echo "Skipping Cypress tests for $SITE"
-        env:
-          SITE: ${{ secrets.SITE }}
+          echo "Skipping Cypress tests for $site"
 
       - name: Screenshots artifact
         if: failure()
