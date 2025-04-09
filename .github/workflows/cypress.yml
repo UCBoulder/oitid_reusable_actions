@@ -67,6 +67,8 @@ jobs:
         if: github.ref_name != 'md-dev' && (env.site == 'data2' || env.site == 'data3' || env.site == 'data4')
         run: |
           echo "Skipping Cypress tests for $site"
+          echo ${{ github.ref_name }}
+          echo ${{ env.site }}
 
       - name: Screenshots artifact
         if: failure()
