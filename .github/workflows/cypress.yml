@@ -38,9 +38,15 @@ jobs:
       - name: Extract branch name
         id: extract_branch
         run: |
-          branch_name=$(git rev-parse --abbrev-ref HEAD)
+          if [[ $GITHUB_REF == refs/heads/* ]]; then
+            branch_name=${GITHUB_REF#refs/heads/}
+          elif [[ $GITHUB_HEAD_REF != "" ]]; then
+            branch_name=$GITHUB_HEAD_REF
+          else
+            branch_name="md-dev"  # Default to md-dev if we can't determine branch
+          fi
           echo "BRANCH_NAME=$branch_name" >> $GITHUB_ENV
-          echo "Branch name: ${{ env.BRANCH_NAME }}"
+          echo "Branch name: $branch_name"
 
       - name: ddev
         uses: UCBoulder/oitid_ddev_start@1.0
