@@ -35,11 +35,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.2
 
+      - name: Extract branch name
+        id: extract_branch
+        run: |
+          branch_name=$(git rev-parse --abbrev-ref HEAD)
+          echo "BRANCH_NAME=$branch_name" >> $GITHUB_ENV
+          echo "Branch name: ${{ env.BRANCH_NAME }}"
+
       - name: ddev
         uses: UCBoulder/oitid_ddev_start@1.0
         env:
           site: ${{ secrets.SITE }}
-        if: github.ref_name == 'md-dev' || (env.site == 'oit' || env.site == 'data' || env.site == 'data1')
+        if: env.site == 'md-dev' || (env.site == 'oit' || env.site == 'data' || env.site == 'data1')
         with:
           DATABASE: ${{ secrets.DATABASE }}
           GH_TOKEN_REPO: ${{ secrets.GH_TOKEN_REPO }}
@@ -52,13 +59,6 @@ jobs:
           LIASON: ${{ secrets.LIASON }}
           SUBSCRIPTIONS_KEY: ${{ secrets.SUBSCRIPTIONS_KEY }}
           CONFIG_SYNC: 1
-
-      - name: Extract branch name
-        id: extract_branch
-        run: |
-          branch_name=$(git rev-parse --abbrev-ref HEAD)
-          echo "BRANCH_NAME=$branch_name" >> $GITHUB_ENV
-          echo "Branch name: ${{ env.BRANCH_NAME }}"
 
       - name: Run Cypress tests
         env:
@@ -77,6 +77,14 @@ jobs:
           echo "Full ref: ${{ github.ref_name }}"
           echo "Branch name: ${{ env.BRANCH_NAME }}"
           echo "Site: ${{ env.site }}"
+          ${{ env.site }} >> branch.txt
+
+      - name: 'Upload Branch txt'
+        uses: actions/upload-artifact@v4
+        with:
+          name: branch
+          path: branch.txt
+          retention-days: 1
 
       - name: Screenshots artifact
         if: failure()
