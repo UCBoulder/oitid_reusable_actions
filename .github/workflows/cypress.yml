@@ -61,14 +61,22 @@ jobs:
           domain=$(echo "$SITE" | sed 's/[0-9]//g')
           vendor/bin/robo cypress $site
 
+      - name: Extract branch name
+        id: extract_branch
+        run: |
+          branch_name=$(git rev-parse --abbrev-ref HEAD)
+          echo "BRANCH_NAME=$branch_name" >> $GITHUB_ENV
+          echo "Branch name: ${{ env.BRANCH_NAME }}"
+
       - name: Skip Cypress tests
         env:
           site: ${{ secrets.SITE }}
-        if: github.ref_name != 'md-dev' && (env.site == 'data2' || env.site == 'data3' || env.site == 'data4')
+        if: env.BRANCH_NAME != 'md-dev' && (env.site == 'data2' || env.site == 'data3' || env.site == 'data4')
         run: |
           echo "Skipping Cypress tests for $site"
-          echo ${{ github.ref_name }}
-          echo ${{ env.site }}
+          echo "Full ref: ${{ github.ref_name }}"
+          echo "Branch name: ${{ env.BRANCH_NAME }}"
+          echo "Site: ${{ env.site }}"
 
       - name: Screenshots artifact
         if: failure()
