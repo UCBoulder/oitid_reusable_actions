@@ -77,7 +77,7 @@ jobs:
           echo "Full ref: ${{ github.ref_name }}"
           echo "Branch name: ${{ env.BRANCH_NAME }}"
           echo "Site: ${{ env.site }}"
-          ${{ env.site }} >> branch.txt
+          echo "Site: ${{ env.site }}" >> branch.txt
 
       - name: 'Upload Branch txt'
         uses: actions/upload-artifact@v4
