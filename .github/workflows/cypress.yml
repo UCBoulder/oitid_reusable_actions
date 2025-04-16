@@ -77,14 +77,7 @@ jobs:
           echo "Full ref: ${{ github.ref_name }}"
           echo "Branch name: ${{ env.BRANCH_NAME }}"
           echo "Site: ${{ env.site }}"
-          echo "Site: ${{ env.site }}" >> branch.txt
-
-      - name: 'Upload Branch txt'
-        uses: actions/upload-artifact@v4
-        with:
-          name: branch
-          path: branch.txt
-          retention-days: 1
+          git rev-parse --abbrev-ref HEAD
 
       - name: Screenshots artifact
         if: failure()
