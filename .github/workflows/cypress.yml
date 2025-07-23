@@ -30,7 +30,7 @@ permissions:
   actions: read
   contents: write
 jobs:
-  behat:
+  cypress:
     name: Cypress tests
     runs-on: ubuntu-latest
     environment: oit-ci
@@ -50,6 +50,14 @@ jobs:
           echo "BRANCH_NAME=$branch_name" >> $GITHUB_ENV
           echo "Branch name: $branch_name"
 
+      - name: Set panthon secrets
+        run: |
+          touch secrets.json
+          echo "$PANTHEON_SECRETS" > secrets.json
+          cat secrets.json
+        with:
+          PANTHEON_SECRETS: ${{ secrets.PANTHEON_SECRETS }}
+
       - name: ddev
         uses: UCBoulder/oitid_ddev_start@2.0
         env:
@@ -66,7 +74,6 @@ jobs:
           TEAMS_KEY: ${{ secrets.TEAMS_KEY }}
           LIASON: ${{ secrets.LIASON }}
           SUBSCRIPTIONS_KEY: ${{ secrets.SUBSCRIPTIONS_KEY }}
-          PANTHEON_SECRETS: ${{ secrets.PANTHEON_SECRETS }}
           CONFIG_SYNC: 1
 
       - name: Run Cypress tests
