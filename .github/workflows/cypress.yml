@@ -54,7 +54,6 @@ jobs:
         run: |
           touch secrets.json
           echo "$PANTHEON_SECRETS" > secrets.json
-          cat secrets.json
         env:
           PANTHEON_SECRETS: ${{ secrets.PANTHEON_SECRETS }}
 
