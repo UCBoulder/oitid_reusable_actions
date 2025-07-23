@@ -51,7 +51,7 @@ jobs:
           echo "Branch name: $branch_name"
 
       - name: ddev
-        uses: UCBoulder/oitid_ddev_start@2.0
+        uses: UCBoulder/oitid_ddev_start@v2.1
         env:
           site: ${{ secrets.SITE }}
         if: env.BRANCH_NAME == 'md-dev' || (env.site == 'oit' || env.site == 'data' || env.site == 'data1')
