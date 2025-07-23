@@ -24,6 +24,8 @@ on:
         description: "Run config sync boolean"
       SITE:
         description: "Site to test"
+      PANTHEON_SECRETS:
+        description: "Pantheon secrets file"
 permissions:
   actions: read
   contents: write
@@ -49,7 +51,7 @@ jobs:
           echo "Branch name: $branch_name"
 
       - name: ddev
-        uses: UCBoulder/oitid_ddev_start@v2.1
+        uses: UCBoulder/oitid_ddev_start@2.0
         env:
           site: ${{ secrets.SITE }}
         if: env.BRANCH_NAME == 'md-dev' || (env.site == 'oit' || env.site == 'data' || env.site == 'data1')
@@ -64,6 +66,7 @@ jobs:
           TEAMS_KEY: ${{ secrets.TEAMS_KEY }}
           LIASON: ${{ secrets.LIASON }}
           SUBSCRIPTIONS_KEY: ${{ secrets.SUBSCRIPTIONS_KEY }}
+          PANTHEON_SECRETS: ${{ secrets.PANTHEON_SECRETS }}
           CONFIG_SYNC: 1
 
       - name: Run Cypress tests
