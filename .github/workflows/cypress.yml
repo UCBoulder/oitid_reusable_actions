@@ -6,18 +6,6 @@ on:
         description: "PAT"
       LANDO_ENV:
         description: ".env variables"
-      CREATEUSERS:
-        description: "Dev users script"
-      SERVICENOW_KEY:
-        description: "Servicenow key"
-      ENCRYPT_KEY:
-        description: "One key to rule them all"
-      TEAMS_KEY:
-        description: "Key to send teams messages"
-      LIASON:
-        description: "Liason Key"
-      SUBSCRIPTIONS_KEY:
-        description: "Subscriptions key"
       DATABASE:
         description: "Use specific backup"
       CONFIG_SYNC:
@@ -67,12 +55,6 @@ jobs:
           GH_TOKEN_REPO: ${{ secrets.GH_TOKEN_REPO }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LANDO_ENV: ${{ secrets.LANDO_ENV }}
-          CREATEUSERS: ${{ secrets.CREATEUSERS }}
-          SERVICENOW_KEY: ${{ secrets.SERVICENOW_KEY }}
-          ENCRYPT_KEY: ${{ secrets.ENCRYPT_KEY }}
-          TEAMS_KEY: ${{ secrets.TEAMS_KEY }}
-          LIASON: ${{ secrets.LIASON }}
-          SUBSCRIPTIONS_KEY: ${{ secrets.SUBSCRIPTIONS_KEY }}
           CONFIG_SYNC: 1
 
       - name: Run Cypress tests
