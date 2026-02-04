@@ -46,7 +46,7 @@ jobs:
           PANTHEON_SECRETS: ${{ secrets.PANTHEON_SECRETS }}
 
       - name: ddev
-        uses: UCBoulder/oitid_ddev_start@v2.2
+        uses: UCBoulder/oitid_ddev_start@v2.3
         env:
           site: ${{ secrets.SITE }}
         if: env.BRANCH_NAME == 'md-dev' || (env.site == 'oit' || env.site == 'data' || env.site == 'data1')
