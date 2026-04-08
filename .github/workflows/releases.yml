@@ -14,7 +14,7 @@ jobs:
     name: Tag code
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v6.0.2
       - name: Create/push tag
         run: |
           git remote set-url origin https://$gh_user:$gh_token@github.com/$repo.git

@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: oit-ci
     steps:
-      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v6.0.2
 
       - name: Extract branch name
         id: extract_branch
@@ -67,7 +67,7 @@ jobs:
 
       - name: Screenshots artifact
         if: failure()
-        uses: actions/upload-artifact@v4.3.1
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: cypress-screenshots-${{ secrets.SITE }}
           path: tests/cypress/cypress/screenshots
