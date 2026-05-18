@@ -25,7 +25,7 @@ jobs:
           fetch-depth: 0
       - name: Create/push tag
         run: |
-          git remote set-url origin https://$gh_user:$gh_token@github.com/$repo.git
+          git remote set-url origin https://$gh_user:$GH_TOKEN@github.com/$repo.git
           git config --global user.email "buffalor@colorado.edu"
           git config --global user.name "$gh_user"
           git fetch origin
@@ -49,6 +49,6 @@ jobs:
             --notes-file release.md
         env:
           set_version: ${{ inputs.version || 'iterate' }}
-          gh_token: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           gh_user: ${{ github.actor }}
           repo: ${{ github.repository }}
