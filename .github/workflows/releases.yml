@@ -44,9 +44,9 @@ jobs:
           git push origin --tags
           echo '# CHANGELOG' > release.md
           git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s' "${latest_sha}..${current_branch}" --no-merges >> release.md
-          gh release create "$next_version" \
-            --title "$next_version" \
-            --notes-file release.md
+
+          gh release create "$next_version" --generate-notes
+
         env:
           set_version: ${{ inputs.version || 'iterate' }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
