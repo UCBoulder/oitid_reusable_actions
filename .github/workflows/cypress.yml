@@ -60,7 +60,7 @@ jobs:
       - name: Run Cypress tests
         env:
           site: ${{ secrets.SITE }}
-        if: env.BRANCH_NAME == 'md-dev' || (env.site == 'oit' || env.site == 'data' || env.site == 'data1')
+        if: env.BRANCH_NAME == 'md-dev' || (env.site == 'oit' || env.site == 'oit1' || env.site == 'data' || env.site == 'data1')
         run: |
           domain=$(echo "$SITE" | sed 's/[0-9]//g')
           vendor/bin/robo cypress $site
