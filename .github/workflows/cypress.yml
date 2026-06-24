@@ -49,7 +49,7 @@ jobs:
         uses: UCBoulder/oitid_ddev_start@v2.4
         env:
           site: ${{ secrets.SITE }}
-        if: env.BRANCH_NAME == 'md-dev' || (env.site == 'oit' || env.site == 'data' || env.site == 'data1')
+        if: env.BRANCH_NAME == 'md-dev' || (env.site == 'oit' || env.site == 'oit1'|| env.site == 'data' || env.site == 'data1')
         with:
           DATABASE: ${{ secrets.DATABASE }}
           GH_TOKEN_REPO: ${{ secrets.GH_TOKEN_REPO }}
