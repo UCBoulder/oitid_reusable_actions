@@ -13,6 +13,10 @@ on:
         required: false
         default: 'iterate'
         type: string
+    secrets:
+      COMPOSER_REPO_DISPATCH_TOKEN:
+        description: 'Token used to send a package-released dispatch to UCBoulder/oit_composer. Optional; notification is skipped when absent.'
+        required: false
 permissions:
   contents: write
 jobs:
@@ -51,4 +55,16 @@ jobs:
           set_version: ${{ inputs.version || 'iterate' }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           gh_user: ${{ github.actor }}
+          repo: ${{ github.repository }}
+
+      - name: Notify Composer repository
+        continue-on-error: true
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "COMPOSER_REPO_DISPATCH_TOKEN not provided; skipping Composer repository rebuild."
+            exit 0
+          fi
+          gh api "repos/UCBoulder/oit_composer/dispatches" -f event_type=package-released -f "client_payload[repository]=$repo"
+        env:
+          GH_TOKEN: ${{ secrets.COMPOSER_REPO_DISPATCH_TOKEN }}
           repo: ${{ github.repository }}
